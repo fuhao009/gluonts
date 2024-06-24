@@ -12,7 +12,7 @@
 # permissions and limitations under the License.
 
 from typing import Iterator, List, Optional, Tuple
-
+import pandas as pd
 import numpy as np
 from pandas.tseries.offsets import BaseOffset
 
@@ -445,12 +445,13 @@ class ContinuousTimeInstanceSplitter(FlatMapTransformation):
 
             r["past_valid_length"] = np.array([len(past_mask)])
 
-            print(data[self.start_field])
-            print(future_start)
-            print(self.freq)
+            # print(data[self.start_field])
+            # print(future_start)
+            # print(self.freq)
 
             r[self.forecast_start_field] = (
-                data[self.start_field] + self.freq.delta * future_start
+                # fix removed in a future version of pandas
+                data[self.start_field] + pd.Timedelta(self.freq) * future_start
             )
 
             if is_train:  # include the future only if is_train
